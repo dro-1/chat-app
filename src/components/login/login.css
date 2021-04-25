@@ -1,0 +1,46 @@
+div.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+div.login > main {
+  display: block;
+}
+
+div.login > main > header {
+  text-align: center;
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+form.login {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100px;
+  justify-content: space-between;
+  text-align: center;
+}
+
+form.login > button {
+  width: 100%;
+  margin: 1rem auto;
+  display: block;
+  border: none;
+  font-size: 1.3rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+form.login > button:first-child {
+  background-color: palevioletred;
+}
+
+form.login > button:last-child {
+  background-color: lightskyblue;
+}
