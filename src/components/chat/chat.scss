@@ -1,0 +1,68 @@
+main.home {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  & > header {
+    width: 100%;
+    background-color: lightsteelblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    & > img {
+      height: 10rem;
+      width: 10rem;
+      border-radius: 50%;
+    }
+    & > p {
+      font-size: 2rem;
+    }
+    & > button {
+      font-size: 1.5rem;
+      border: none;
+      padding: 1rem;
+      background-color: rgba(255, 0, 0, 0.5);
+      color: white;
+      border-radius: 0.5rem;
+    }
+  }
+
+  & > main {
+    overflow-y: auto;
+    padding-bottom: 4rem;
+    div.messageBox {
+      padding: 1rem;
+      background-color: rgb(112, 119, 221);
+      border-radius: 0.5rem;
+      width: 55%;
+      margin: 1rem;
+      color: white;
+      &.right {
+        background-color: rgb(59, 64, 136);
+        margin-left: auto;
+        text-align: right;
+      }
+    }
+  }
+
+  & > form {
+    width: 100%;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    input {
+      width: 80%;
+      font-size: 1.5rem;
+      padding: 1rem;
+    }
+    button {
+      width: 20%;
+      border: none;
+      background-color: seagreen;
+      color: white;
+      font-size: 1.5rem;
+      padding: 1rem;
+    }
+  }
+}

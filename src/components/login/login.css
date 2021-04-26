@@ -19,9 +19,7 @@ div.login > main > header {
 
 form.login {
   display: flex;
-  flex-direction: column;
   width: 100%;
-  min-height: 100px;
   justify-content: space-between;
   text-align: center;
 }
