@@ -25,6 +25,4 @@ const twitterProvider = new firebase.auth.TwitterAuthProvider();
 
 export const signInWithTwitter = () => auth.signInWithPopup(twitterProvider);
 
-export const signOut = () => auth.signOut();
-
 export default firebase;

@@ -1,19 +1,40 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import io from "socket.io-client";
 import "./login.css";
 import {
   signInWithGoogle,
   signInWithTwitter,
 } from "./../../firebase/firebase.utils";
+import { axiosInstance } from "./../../api/axios.js";
 
-const Login = () => {
+const Login = ({ user }) => {
   const history = useHistory();
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await signInWithGoogle();
+      const authRes = await signInWithGoogle();
+      console.log(authRes);
+      const body = {
+        query: `
+        mutation CreateUser($name: String!, $image: String!){
+          createUser(data:{
+            name: $name
+            image: $image
+          }){
+            name
+            image
+          }
+        }
+        `,
+        variables: {
+          name: authRes.user.displayName,
+          image: authRes.user.photoURL ? authRes.user.photoURL : "",
+        },
+      };
+
+      const res = await axiosInstance.post("/graphql", body);
       console.log(res);
+
       history.push("/");
     } catch (e) {
       console.log(e);
@@ -23,23 +44,35 @@ const Login = () => {
   const handleTwitterSignIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await signInWithTwitter();
+      const authRes = await signInWithTwitter();
+      console.log(authRes);
+
+      const body = {
+        query: `
+        mutation CreateUser($name: String!, $image: String!){
+          createUser(data:{
+            name: $name
+            image: $image
+          }){
+            name
+            image
+          }
+        }
+        `,
+        variables: {
+          name: authRes.user.displayName,
+          image: authRes.user.photoURL ? authRes.user.photoURL : "",
+        },
+      };
+
+      const res = await axiosInstance.post("/graphql", body);
       console.log(res);
+
       history.push("/");
     } catch (e) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    const socket = io("http://localhost:3000");
-    socket.on("connect", () => {
-      console.log(`Connected to ID ${socket.id}`);
-    });
-    socket.on("hello", (data) => {
-      console.log(data);
-    });
-  }, []);
 
   return (
     <div className="login">
