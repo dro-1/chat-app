@@ -36,7 +36,7 @@ const Chat = ({ recipient, sender }) => {
         content: message,
       },
     };
-    const response = await axios.post("http://localhost:3000/message", body, {
+    await axios.post("http://localhost:3000/message", body, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -56,6 +56,7 @@ const Chat = ({ recipient, sender }) => {
       setChat(history.location.state.chat);
       setSender(history.location.state.sender);
     }
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -83,6 +84,7 @@ const Chat = ({ recipient, sender }) => {
       });
     });
     return () => socketRef.current.disconnect();
+    //eslint-disable-next-line
   }, [chat?._id]);
 
   useEffect(() => console.log(messages), [messages]);

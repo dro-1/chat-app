@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -69,6 +69,7 @@ function App() {
       }
     });
     return unsubscribeFromAuth;
+    //eslint-disable-next-line
   }, []);
 
   const PublicRoute = ({ exact, path, children }) =>

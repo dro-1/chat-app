@@ -75,6 +75,7 @@ const Home = () => {
     if (!currentUser) {
       history.push("/login");
     }
+    //eslint-disable-next-line
   }, []);
 
   return (
