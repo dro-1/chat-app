@@ -22,6 +22,7 @@ const UserProvider = ({ children }) => {
     }
     const userID = user._id;
     if (!skipCheck) {
+      //removes currentUser from chats
       user.chats.data = user.chats.data.map((userData) => {
         return {
           ...userData,

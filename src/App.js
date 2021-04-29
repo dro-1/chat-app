@@ -56,7 +56,6 @@ function App() {
 
         const response = await axiosInstance.post("/graphql", body);
         const user = response?.data?.data?.findUserByName;
-
         if (user) {
           setCurrentUser(user);
         }
