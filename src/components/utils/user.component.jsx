@@ -19,11 +19,7 @@ const User = ({ recipient, sender, chatExists, chat }) => {
       user2Id: sender._id,
     };
     try {
-      const response = await axios.post(
-        "https://dro-chat-app-api.herokuapp.com/chat",
-        body
-      );
-      console.log(response);
+      await axios.post("https://dro-chat-app-api.herokuapp.com/chat", body);
     } catch (e) {
       console.log(e);
     }

@@ -15,7 +15,6 @@ const Login = ({ user }) => {
     e.preventDefault();
     try {
       const authRes = await signInWithGoogle();
-      console.log(authRes);
       const body = {
         query: `
         mutation CreateUser($name: String!, $image: String!){
@@ -35,9 +34,7 @@ const Login = ({ user }) => {
       };
 
       const res = await axiosInstance.post("/graphql", body);
-      console.log(res);
       const user = res?.data?.data?.createUser;
-      console.log(user);
       if (user) {
         setCurrentUser(user, true);
       }
@@ -52,7 +49,6 @@ const Login = ({ user }) => {
     e.preventDefault();
     try {
       const authRes = await signInWithTwitter();
-      console.log(authRes);
 
       const body = {
         query: `
@@ -73,9 +69,7 @@ const Login = ({ user }) => {
       };
 
       const res = await axiosInstance.post("/graphql", body);
-      console.log(res);
       const user = res?.data?.data?.createUser;
-      console.log(user);
       if (user) {
         setCurrentUser(user, true);
       }

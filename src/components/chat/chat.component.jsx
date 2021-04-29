@@ -53,7 +53,6 @@ const Chat = ({ recipient, sender }) => {
   }, [chat]);
 
   useEffect(() => {
-    console.log("Location effect ran");
     if (history.location.state) {
       setRecipient(history.location.state.recipient);
       setChat(history.location.state.chat);
@@ -62,7 +61,6 @@ const Chat = ({ recipient, sender }) => {
   }, [history.location.state]);
 
   useEffect(() => {
-    console.log("Socket io effect ran");
     if (!chat?._id) return;
 
     socketRef.current = io("https://dro-chat-app-api.herokuapp.com", {
@@ -74,7 +72,6 @@ const Chat = ({ recipient, sender }) => {
     });
 
     socketRef.current.on("newMessage", (newMsg) => {
-      console.log(newMsg);
       setMessages((prevMessages) => {
         return [...prevMessages, newMsg];
       });
@@ -88,7 +85,6 @@ const Chat = ({ recipient, sender }) => {
   }, [chat]);
 
   useEffect(() => {
-    console.log(messages);
     bottomDivRef.current.scrollIntoView();
   }, [messages]);
 

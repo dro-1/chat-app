@@ -50,7 +50,6 @@ const Home = () => {
 
     try {
       const response = await axiosInstance.post("/graphql", body);
-      console.log(response);
       let userArray = isSearchEmpty
         ? response?.data?.data?.allUsers?.data
         : [response?.data?.data?.findUserByName];
@@ -81,12 +80,9 @@ const Home = () => {
   useEffect(() => {
     socketRef.current = io("https://dro-chat-app-api.herokuapp.com");
 
-    socketRef.current.on("connect", () => {
-      console.log(`Connected to ID ${socketRef.current.id}`);
-    });
+    socketRef.current.on("connect", () => {});
 
     socketRef.current.on("newChat", (chat) => {
-      console.log(chat);
       setChats([
         ...chats,
         {

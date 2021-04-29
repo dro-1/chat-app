@@ -18,7 +18,6 @@ function App() {
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged((authUser) => {
-      console.log(authUser);
       const getUserFromFauna = async () => {
         const body = {
           query: `
@@ -56,9 +55,8 @@ function App() {
         };
 
         const response = await axiosInstance.post("/graphql", body);
-        console.log(response);
         const user = response?.data?.data?.findUserByName;
-        console.log(user);
+
         if (user) {
           setCurrentUser(user);
         }
