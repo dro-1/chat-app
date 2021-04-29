@@ -65,7 +65,7 @@ const Chat = ({ recipient, sender }) => {
     console.log("Socket io effect ran");
     if (!chat?._id) return;
 
-    socketRef.current = io("http://localhost:3000", {
+    socketRef.current = io("https://dro-chat-app-api.herokuapp.com", {
       query: { chatId: chat._id },
     });
 

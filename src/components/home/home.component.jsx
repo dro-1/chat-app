@@ -79,7 +79,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io("https://dro-chat-app-api.herokuapp.com");
 
     socketRef.current.on("connect", () => {
       console.log(`Connected to ID ${socketRef.current.id}`);
