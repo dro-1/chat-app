@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import axios from "axios";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { axiosInstance } from "../../api/axios";
-import { UserContext } from "../../context/user.provider";
 
 const User = ({ recipient, sender, chatExists, chat }) => {
   const history = useHistory();
-  const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const handleClick = async (e) => {
     if (chatExists) {
@@ -17,49 +15,15 @@ const User = ({ recipient, sender, chatExists, chat }) => {
     }
     e.preventDefault();
     const body = {
-      query: `
-      mutation CreateChat($user1: ID, $user2: ID){
-        createChat(data:{
-          users:{
-            connect:[$user1,$user2]
-          }
-        }){
-          _id
-          messages{
-            data{
-              content
-              sender{
-                _id
-              }
-            }
-          }
-          users{
-            data{
-              _id
-              name
-              image
-            }
-          }
-        }
-      }
-      `,
-      variables: {
-        user1: recipient._id,
-        user2: sender._id,
-      },
+      user1Id: recipient._id,
+      user2Id: sender._id,
     };
     try {
-      const response = await axiosInstance.post("/graphql", body);
+      const response = await axios.post(
+        "https://dro-chat-app-api.herokuapp.com/chat",
+        body
+      );
       console.log(response);
-      setCurrentUser({
-        ...currentUser,
-        chats: { data: [response.data.data.createChat] },
-      });
-      history.push("/chat", {
-        chat: response.data.data.createChat,
-        recipient,
-        sender,
-      });
     } catch (e) {
       console.log(e);
     }

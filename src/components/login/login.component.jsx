@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "./login.css";
 import {
@@ -6,9 +6,11 @@ import {
   signInWithTwitter,
 } from "./../../firebase/firebase.utils";
 import { axiosInstance } from "./../../api/axios.js";
+import { UserContext } from "../../context/user.provider";
 
 const Login = ({ user }) => {
   const history = useHistory();
+  const { setCurrentUser } = useContext(UserContext);
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
     try {
@@ -34,6 +36,11 @@ const Login = ({ user }) => {
 
       const res = await axiosInstance.post("/graphql", body);
       console.log(res);
+      const user = res?.data?.data?.createUser;
+      console.log(user);
+      if (user) {
+        setCurrentUser(user, true);
+      }
 
       history.push("/");
     } catch (e) {
@@ -67,6 +74,11 @@ const Login = ({ user }) => {
 
       const res = await axiosInstance.post("/graphql", body);
       console.log(res);
+      const user = res?.data?.data?.createUser;
+      console.log(user);
+      if (user) {
+        setCurrentUser(user, true);
+      }
 
       history.push("/");
     } catch (e) {

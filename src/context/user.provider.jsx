@@ -3,10 +3,19 @@ import React, { createContext, useState } from "react";
 export const UserContext = createContext({
   currentUser: null,
   setCurrentUser: () => null,
+  addMessage: () => null,
 });
 
 const UserProvider = ({ children }) => {
   const [currentUser, setUser] = useState(null);
+
+  const addMessage = (chatId, newMsg) => {
+    const chatIndex = currentUser.chats.data.findIndex(
+      (iChat) => iChat._id === chatId
+    );
+    currentUser.chats.data[chatIndex].messages.data.push(newMsg);
+  };
+
   const setCurrentUser = (user, skipCheck) => {
     if (!user) {
       return setUser(null);
@@ -28,6 +37,7 @@ const UserProvider = ({ children }) => {
       value={{
         currentUser,
         setCurrentUser,
+        addMessage,
       }}
     >
       {children}

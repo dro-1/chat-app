@@ -30,8 +30,9 @@ div.home {
     display: flex;
     border: solid 2px rgba(0, 0, 0, 0.5);
     border-radius: 0.5rem;
-    width: 60%;
+    width: 90%;
     margin: 1rem auto;
+    max-width: 800px;
     input,
     button {
       padding: 1rem;

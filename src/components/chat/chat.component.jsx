@@ -13,12 +13,14 @@ const Chat = ({ recipient, sender }) => {
   const [iRecipient, setRecipient] = useState(recipient);
   const [iSender, setSender] = useState(sender);
   const [chat, setChat] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(null);
   const [message, setMessage] = useState("");
 
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { addMessage } = useContext(UserContext);
 
   const socketRef = useRef(null);
+
+  const bottomDivRef = useRef(null);
 
   const handleSignOut = (e) => {
     e.preventDefault();
@@ -36,7 +38,7 @@ const Chat = ({ recipient, sender }) => {
         content: message,
       },
     };
-    await axios.post("http://localhost:3000/message", body, {
+    await axios.post("https://dro-chat-app-api.herokuapp.com/message", body, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -51,43 +53,44 @@ const Chat = ({ recipient, sender }) => {
   }, [chat]);
 
   useEffect(() => {
+    console.log("Location effect ran");
     if (history.location.state) {
       setRecipient(history.location.state.recipient);
       setChat(history.location.state.chat);
       setSender(history.location.state.sender);
     }
-    //eslint-disable-next-line
-  }, []);
+  }, [history.location.state]);
 
   useEffect(() => {
+    console.log("Socket io effect ran");
     if (!chat?._id) return;
+
     socketRef.current = io("http://localhost:3000", {
       query: { chatId: chat._id },
     });
+
     socketRef.current.on("connect", () => {
       console.log(`Connected to ID ${socketRef.current.id}`);
     });
-    socketRef.current.on("newMessage", (args) => {
-      console.log(args);
 
-      const chatIndex = currentUser.chats.data.findIndex(
-        (iChat) => iChat._id === chat._id
-      );
-      currentUser.chats.data[chatIndex].messages.data.push(args);
-      const newMessages = currentUser.chats.data[chatIndex].messages.data;
-      console.log(currentUser);
-      setCurrentUser(currentUser, true);
-      console.log(newMessages);
-      setMessages((prevMessage) => {
-        console.log(prevMessage);
-        return newMessages;
+    socketRef.current.on("newMessage", (newMsg) => {
+      console.log(newMsg);
+      setMessages((prevMessages) => {
+        return [...prevMessages, newMsg];
       });
+      addMessage(chat?._id, newMsg);
     });
-    return () => socketRef.current.disconnect();
-    //eslint-disable-next-line
-  }, [chat?._id]);
 
-  useEffect(() => console.log(messages), [messages]);
+    return () => {
+      socketRef.current.disconnect();
+    };
+    //eslint-disable-next-line
+  }, [chat]);
+
+  useEffect(() => {
+    console.log(messages);
+    bottomDivRef.current.scrollIntoView();
+  }, [messages]);
 
   return (
     <main className="home">
@@ -97,16 +100,21 @@ const Chat = ({ recipient, sender }) => {
         <button onClick={handleSignOut}>SIGN OUT</button>
       </header>
       <main>
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            message={{
-              content: message.content,
-              type: message.sender._id === iSender._id ? "SENT" : "RECEIVED",
-            }}
-          />
-        ))}
+        {messages
+          ? messages.map((message, index) => (
+              <Message
+                key={index}
+                message={{
+                  content: message.content,
+                  type:
+                    message.sender._id === iSender._id ? "SENT" : "RECEIVED",
+                }}
+              />
+            ))
+          : null}
+        <div ref={bottomDivRef} />
       </main>
+
       <form>
         <input
           type="text"

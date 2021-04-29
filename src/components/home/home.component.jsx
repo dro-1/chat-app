@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { io } from "socket.io-client";
 import { axiosInstance } from "../../api/axios";
 import { UserContext } from "../../context/user.provider";
 import { auth } from "../../firebase/firebase.utils";
@@ -10,9 +11,10 @@ import "./home.scss";
 const Home = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-  const { currentUser } = useContext(UserContext);
-  let chats = currentUser.chats.data;
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [chats, setChats] = useState(currentUser.chats?.data || []);
   const history = useHistory();
+  const socketRef = useRef(null);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -69,12 +71,35 @@ const Home = () => {
     history.push("/login");
   };
 
-  useEffect(() => console.log(users), [users]);
-
   useEffect(() => {
     if (!currentUser) {
       history.push("/login");
     }
+    //eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000");
+
+    socketRef.current.on("connect", () => {
+      console.log(`Connected to ID ${socketRef.current.id}`);
+    });
+
+    socketRef.current.on("newChat", (chat) => {
+      console.log(chat);
+      setChats([
+        ...chats,
+        {
+          ...chat,
+          users: chat.users.data,
+        },
+      ]);
+      setCurrentUser({
+        ...currentUser,
+        chats: { data: [...currentUser.chats.data, chat] },
+      });
+    });
+    return () => socketRef.current.disconnect();
     //eslint-disable-next-line
   }, []);
 
@@ -100,9 +125,7 @@ const Home = () => {
           {users
             .filter((user) => {
               const userStore = {};
-              console.log(chats);
               chats.forEach((chatDeets) => {
-                console.log(chatDeets);
                 userStore[chatDeets.users[0]._id] = true;
               });
               return !!!userStore[user._id];
