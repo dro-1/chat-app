@@ -103,7 +103,7 @@ const Home = () => {
     <div className="home">
       <header>
         <img src={currentUser?.image} alt="User" />
-        <p>{currentUser?.name}</p>
+        <p>Welcome, {currentUser?.name}</p>
         <button onClick={handleSignOut}>SIGN OUT</button>
       </header>
       <form>

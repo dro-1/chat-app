@@ -54,12 +54,20 @@ main.home {
     position: fixed;
     bottom: 0;
     left: 0;
+    border: solid 2px rgb(24, 64, 80);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
     input {
       width: 80%;
       font-size: 1.5rem;
       padding: 1rem;
+      background-color: rgb(199, 194, 194);
+      border: none;
+      color: #010;
+      border-top-left-radius: 1rem;
     }
     button {
+      border-top-right-radius: 1rem;
       width: 20%;
       border: none;
       background-color: seagreen;

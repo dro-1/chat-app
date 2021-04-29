@@ -116,6 +116,7 @@ const Chat = ({ recipient, sender }) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type message here..."
         />
         <button onClick={submitMessage}>SEND</button>
       </form>
