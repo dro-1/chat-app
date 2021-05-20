@@ -17,8 +17,13 @@ main.home {
       width: 10rem;
       border-radius: 50%;
     }
-    & > p {
+    & > a {
       font-size: 2rem;
+      color: rgb(24, 64, 80);
+      text-decoration: none;
+      &:hover {
+        color: rgba(255, 0, 0, 0.5);
+      }
     }
     & > button {
       font-size: 1.5rem;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,15 +10,19 @@ import Chat from "./components/chat/chat.component";
 import Home from "./components/home/home.component";
 
 import Login from "./components/login/login.component";
+import Loader from "./components/utils/loader.component";
 import { UserContext } from "./context/user.provider";
 import { auth } from "./firebase/firebase.utils";
 
 function App() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged((authUser) => {
+      console.log(authUser);
       const getUserFromFauna = async () => {
+        setLoading(true);
         const body = {
           query: `
       query FindUser($name: String!){
@@ -56,14 +60,17 @@ function App() {
 
         const response = await axiosInstance.post("/graphql", body);
         const user = response?.data?.data?.findUserByName;
+        setLoading(false);
         if (user) {
           setCurrentUser(user);
         }
       };
       if (authUser) {
+        console.log(authUser);
         getUserFromFauna();
       } else {
         setCurrentUser(null);
+        setLoading(false);
       }
     });
     return unsubscribeFromAuth;
@@ -71,14 +78,18 @@ function App() {
   }, []);
 
   const PublicRoute = ({ exact, path, children }) =>
-    currentUser ? (
+    loading ? (
+      <Loader />
+    ) : currentUser ? (
       <Redirect to="/" />
     ) : (
       <Route exact={exact ? true : false} path={path} children={children} />
     );
 
   const PrivateRoute = ({ exact, path, children }) =>
-    !currentUser ? (
+    loading ? (
+      <Loader />
+    ) : !currentUser ? (
       <Redirect to="/login" />
     ) : (
       <Route exact={exact ? true : false} path={path} children={children} />
@@ -87,9 +98,9 @@ function App() {
   return (
     <Router>
       <Switch>
-        <PrivateRoute exact path="/" children={<Home user={currentUser} />} />
-        <PrivateRoute path="/chat" children={<Chat sender={currentUser} />} />
-        <PublicRoute path="/login" children={<Login user={currentUser} />} />
+        <PrivateRoute exact path="/" children={<Home />} />
+        <PrivateRoute path="/chat" children={<Chat />} />
+        <PublicRoute path="/login" children={<Login />} />
       </Switch>
     </Router>
   );

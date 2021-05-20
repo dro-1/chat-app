@@ -8,7 +8,7 @@ import {
 import { axiosInstance } from "./../../api/axios.js";
 import { UserContext } from "../../context/user.provider";
 
-const Login = ({ user }) => {
+const Login = () => {
   const history = useHistory();
   const { setCurrentUser } = useContext(UserContext);
   const handleGoogleSignIn = async (e) => {

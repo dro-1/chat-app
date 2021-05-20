@@ -11,7 +11,7 @@ import "./home.scss";
 const Home = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser, addChatToUser } = useContext(UserContext);
   const [chats, setChats] = useState(currentUser.chats?.data || []);
   const history = useHistory();
   const socketRef = useRef(null);
@@ -90,10 +90,7 @@ const Home = () => {
           users: chat.users.data,
         },
       ]);
-      setCurrentUser({
-        ...currentUser,
-        chats: { data: [...currentUser.chats.data, chat] },
-      });
+      addChatToUser(chat);
     });
     return () => socketRef.current.disconnect();
     //eslint-disable-next-line
@@ -126,24 +123,29 @@ const Home = () => {
               });
               return !!!userStore[user._id];
             })
-            .map((arrUser, index) => (
-              <User key={index} recipient={arrUser} sender={currentUser} />
-            ))}
+            .map((arrUser, index) => {
+              return (
+                <User key={index} recipient={arrUser} sender={currentUser} />
+              );
+            })}
         </main>
       ) : null}
       {chats.length > 0 ? (
         <div className="chats">
           <header>
             <h3>Chats</h3>
-            {chats.map((chatData, index) => (
-              <User
-                chatExists
-                chat={chatData}
-                key={index}
-                recipient={chatData.users[0]}
-                sender={currentUser}
-              />
-            ))}
+            {chats.map((chatData, index) => {
+              console.log("making a chat", chatData);
+              return (
+                <User
+                  chatExists
+                  chat={chatData}
+                  key={index}
+                  recipient={chatData.users[0]}
+                  sender={currentUser}
+                />
+              );
+            })}
           </header>
         </div>
       ) : null}

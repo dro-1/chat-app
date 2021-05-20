@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import io from "socket.io-client";
 import Message from "../utils/message.component";
 import { auth } from "../../firebase/firebase.utils";
@@ -92,7 +92,7 @@ const Chat = ({ recipient, sender }) => {
     <main className="home">
       <header>
         <img src={iRecipient?.image} alt="User" />
-        <p>{iRecipient?.name}</p>
+        <Link to="/">{iRecipient?.name}</Link>
         <button onClick={handleSignOut}>SIGN OUT</button>
       </header>
       <main>
